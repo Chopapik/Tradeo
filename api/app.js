@@ -1,12 +1,28 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+import createError from 'http-errors';
+import express from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+import dotenv from "dotenv";
+import { fileURLToPath } from 'url';
 
-var indexRouter = require('./routes/index');
 
-var app = express();
+import { dbPool, connectDB } from './config/mysql.config.js';
+
+
+const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
+const __dirname = path.dirname(__filename); // get the name of the directory
+
+const app = express();
+
+dotenv.config();
+
+//database connection
+await connectDB();
+
+
+import authRoute from './features/user/routes/auth.route.js';
+
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -15,10 +31,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../client/dist')));
 app.set('view engine', 'jade');
 
-app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
-});
+// app.get('*', function (req, res) {
+//   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+// });
 
+
+app.use('/auth', authRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -36,4 +54,4 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+export default app;
