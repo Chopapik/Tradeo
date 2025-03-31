@@ -5,8 +5,8 @@ import { dbPool } from "../../../config/mysql.config.js";
 import UserService from "./user.services.js";
 
 class AuthService {
-    static async registerUser(email, password, confirmPassword) {
-        const registerModel = new RegisterModel(email, password, confirmPassword);
+    static async registerUser(email, password, confirmPassword, acceptTerms) {
+        const registerModel = new RegisterModel(email, password, confirmPassword, acceptTerms);
 
         if (!registerModel.arePasswordsMatching()) {
             throw new ValidationError({
@@ -68,6 +68,13 @@ class AuthService {
             });
         }
 
+        if (!registerModel.isTermsAccepted()) {
+            throw new ValidationError({
+                field: "acceptTerms",
+                message: "Należy zaakcpetować regulamin"
+            });
+        }
+
         const result = await UserService.getUserByEmail(email)
         if (result.length > 0) {
             throw new ValidationError({
@@ -86,6 +93,8 @@ class AuthService {
             });
         }
     }
+
+
 }
 
 export default AuthService;
