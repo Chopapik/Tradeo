@@ -8,42 +8,74 @@ class AuthService {
         const registerModel = new RegisterModel(email, password, confirmPassword);
 
         if (!registerModel.arePasswordsMatching()) {
-            throw new ValidationError("password", "Hasła się nie zgadzają");
+            throw new ValidationError({
+                field: "password",
+                message: "Hasła się nie zgadzają"
+            });
         }
 
         if (!registerModel.isPasswordEntered()) {
-            throw new ValidationError("password", "Nie podano hasła");
+            throw new ValidationError({
+                field: "password",
+                message: "Nie podano hasła"
+            });
         }
         if (!registerModel.isConfirmPasswordEntered()) {
-            throw new ValidationError("confirmPassword", "Nie podano hasła");
+            throw new ValidationError({
+                field: "confirmPassword",
+                message: "Nie podano hasła"
+            });
         }
 
         if (registerModel.isPasswordTooShort()) {
-            throw new ValidationError("password", "Hasło jest za krótkie");
+            throw new ValidationError({
+                field: "password",
+                message: "Hasło jest za krótkie"
+            });
         }
         if (registerModel.isPasswordTooLong()) {
-            throw new ValidationError("password", "Hasło jest za długie");
+            throw new ValidationError({
+                field: "password",
+                message: "Hasło jest za długie"
+            });
         }
         if (!registerModel.isPasswordValid()) {
-            throw new ValidationError("password", "Hasło musi zawierać co najmniej jedną wielką literę, cyfrę i znak specjalny");
+            throw new ValidationError({
+                field: "password",
+                message: "Hasło musi zawierać co najmniej jedną wielką literę, cyfrę i znak specjalny"
+            });
+        }
+
+        if (!registerModel.isEmailEntered()) {
+            throw new ValidationError({
+                field: "email",
+                message: "Nie podano adresu email"
+            });
         }
 
         if (!registerModel.isEmailValid()) {
-            throw new ValidationError("email", "Niepoprawny format adresu e-mail");
+            throw new ValidationError({
+                field: "email",
+                message: "Niepoprawny format adresu e-mail"
+            });
         }
-        if (!registerModel.isEmailEntered()) {
-            throw new ValidationError("email", "Adres e-mail jest wymagany");
-        }
+
         if (!registerModel.isEmailTooLong()) {
-            throw new ValidationError("email", "Adres e-mail jest za długi");
+            throw new ValidationError({
+                field: "email",
+                message: "Adres e-mail jest za długi"
+            });
         }
 
         try {
             const hashedPassword = await bcrypt.hash(password, 8);
             await dbPool.query("INSERT INTO user (email, password) VALUES (?, ?)", [email, hashedPassword]);
-
         } catch (error) {
-            throw new ValidationError("", `Błąd serwera przy rejestracji użytkownika: ${error.message}`);
+            throw new ValidationError({
+                type: "Critical",
+                message: `Błąd serwera przy rejestracji użytkownika: ${error.message}`,
+                displayType: "critical"
+            });
         }
     }
 }
