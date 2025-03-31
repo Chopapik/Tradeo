@@ -2,6 +2,7 @@ import RegisterModel from "../models/register.model.js";
 import ValidationError from "../../../errors/ValidationError.js";
 import bcrypt from "bcrypt";
 import { dbPool } from "../../../config/mysql.config.js";
+import UserService from "./user.services.js";
 
 class AuthService {
     static async registerUser(email, password, confirmPassword) {
@@ -67,14 +68,21 @@ class AuthService {
             });
         }
 
+        const result = await UserService.getUserByEmail(email)
+        if (result.length > 0) {
+            throw new ValidationError({
+                field: "email",
+                message: "Ten adres e-mail jest za zajęty"
+            });
+        }
+
         try {
             const hashedPassword = await bcrypt.hash(password, 8);
             await dbPool.query("INSERT INTO user (email, password) VALUES (?, ?)", [email, hashedPassword]);
         } catch (error) {
             throw new ValidationError({
-                type: "Critical",
+                type: "critical",
                 message: `Błąd serwera przy rejestracji użytkownika: ${error.message}`,
-                displayType: "critical"
             });
         }
     }
