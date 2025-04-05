@@ -3,6 +3,8 @@ import ValidationError from "../../../errors/ValidationError.js";
 import bcrypt from "bcrypt";
 import { dbPool } from "../../../config/mysql.config.js";
 import UserService from "./user.services.js";
+import LoginModel from "../models/login.model.js";
+import UserRepository from "../repositories/user.repository.js";
 
 class AuthService {
     static async registerUser(email, password, confirmPassword, acceptTerms) {
@@ -85,7 +87,7 @@ class AuthService {
 
         try {
             const hashedPassword = await bcrypt.hash(password, 8);
-            await dbPool.query("INSERT INTO user (email, password) VALUES (?, ?)", [email, hashedPassword]);
+            UserRepository.createUser(email, hashedPassword);
         } catch (error) {
             throw new ValidationError({
                 type: "critical",
