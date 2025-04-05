@@ -1,20 +1,12 @@
-import { dbPool } from "../../../config/mysql.config.js";
-import ValidationError from "../../../errors/ValidationError.js";
+import UserRepository from "../repositories/user.repository.js";
+
 
 class UserService {
     static async getUserByEmail(email) {
-        try {
-            const [rows] = await dbPool.query("SELECT * FROM user WHERE email=?", [email])
-            return rows;
-
-        } catch (error) {
-            throw new ValidationError({
-                type: "critical",
-                message: error.message,
-            });
-        }
-
+        return await UserRepository.getUserByEmail(email);
     }
+
+
 }
 
 export default UserService;
