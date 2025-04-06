@@ -8,4 +8,10 @@ router.post('/register', async (req, res) => {
     await AuthController.registerUser(req, res)
 });
 
+
+router.post('/login', async (req, res) => {
+    await AuthController.loginUser(req, res)
+});
+
+
 export default router;
