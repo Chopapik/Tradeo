@@ -9,7 +9,13 @@ class UserService {
         }
     }
 
-
+    static async createUser(email, hashedPassword) {
+        try {
+            return await UserRepository.createUser(email, hashedPassword);
+        } catch (error) {
+            throw new Error(`Błąd podczas tworzenia użytkownika: ${error.message}`);
+        }
+    }
 }
 
 export default UserService;
