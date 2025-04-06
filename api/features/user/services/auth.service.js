@@ -3,10 +3,12 @@ import ValidationError from "../../../errors/ValidationError.js";
 import bcrypt from "bcrypt";
 import { dbPool } from "../../../config/mysql.config.js";
 import UserService from "./user.services.js";
+import LoginModel from "../models/login.model.js";
+import UserRepository from "../repositories/user.repository.js";
 
 class AuthService {
-    static async registerUser(email, password, confirmPassword) {
-        const registerModel = new RegisterModel(email, password, confirmPassword);
+    static async registerUser(email, password, confirmPassword, acceptTerms) {
+        const registerModel = new RegisterModel(email, password, confirmPassword, acceptTerms);
 
         if (!registerModel.arePasswordsMatching()) {
             throw new ValidationError({
@@ -68,6 +70,13 @@ class AuthService {
             });
         }
 
+        if (!registerModel.isTermsAccepted()) {
+            throw new ValidationError({
+                field: "acceptTerms",
+                message: "Należy zaakcpetować regulamin"
+            });
+        }
+
         const result = await UserService.getUserByEmail(email)
         if (result.length > 0) {
             throw new ValidationError({
@@ -78,7 +87,7 @@ class AuthService {
 
         try {
             const hashedPassword = await bcrypt.hash(password, 8);
-            await dbPool.query("INSERT INTO user (email, password) VALUES (?, ?)", [email, hashedPassword]);
+            await UserRepository.createUser(email, hashedPassword);
         } catch (error) {
             throw new ValidationError({
                 type: "critical",
@@ -86,6 +95,8 @@ class AuthService {
             });
         }
     }
+
+
 }
 
 export default AuthService;

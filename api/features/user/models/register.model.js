@@ -1,8 +1,9 @@
 class RegisterModel {
-    constructor(email, password, confirmPassword) {
+    constructor(email, password, confirmPassword, acceptTerms) {
         this.email = email;
         this.password = password;
         this.confirmPassword = confirmPassword;
+        this.acceptTerms = acceptTerms;
     }
 
     arePasswordsMatching() {
@@ -42,6 +43,11 @@ class RegisterModel {
     isEmailTooLong() {
         return this.email.length < 100;
     }
+
+    isTermsAccepted() {
+        return this.acceptTerms === true || this.acceptTerms === "true";
+    }
+
 
 }
 
