@@ -87,7 +87,7 @@ class AuthService {
 
         try {
             const hashedPassword = await bcrypt.hash(password, 8);
-            UserRepository.createUser(email, hashedPassword);
+            await UserRepository.createUser(email, hashedPassword);
         } catch (error) {
             throw new ValidationError({
                 type: "critical",
