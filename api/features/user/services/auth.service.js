@@ -66,7 +66,7 @@ class AuthService {
             });
         }
 
-        if (!registerModel.isEmailTooLong()) {
+        if (registerModel.isEmailTooLong()) {
             throw new ValidationError({
                 field: "email",
                 message: "Adres e-mail jest za długi"
