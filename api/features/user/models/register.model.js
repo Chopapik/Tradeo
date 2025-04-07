@@ -1,55 +1,58 @@
+import EmailModel from "./email.model.js";
+import PasswordModel from "./password.model.js";
+
 class RegisterModel {
     constructor(email, password, confirmPassword, acceptTerms) {
         this.email = email;
         this.password = password;
         this.confirmPassword = confirmPassword;
         this.acceptTerms = acceptTerms;
+
+        // validators
+        this.emailModel = new EmailModel(email);
+        this.passwordModel = new PasswordModel(password, confirmPassword);
     }
 
+
     arePasswordsMatching() {
-        return this.password === this.confirmPassword;
+        return this.passwordModel.areMatching();
     }
 
     isPasswordTooShort() {
-        return this.password.length < 8;
+        return this.passwordModel.isTooShort();
     }
 
     isPasswordTooLong() {
-        return this.password.length > 40;
+        return this.passwordModel.isTooLong();
     }
 
     isPasswordValid() {
-        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,40}$/;
-        return passwordRegex.test(this.password);
+        return this.passwordModel.isValid();
     }
 
     isPasswordEntered() {
-        return this.password.trim() !== '';
+        return this.passwordModel.isEntered();
     }
 
     isConfirmPasswordEntered() {
-        return this.password.trim() !== '';
+        return this.passwordModel.isConfirmPasswordEntered();
     }
 
     isEmailValid() {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(this.email);
+        return this.emailModel.isValid();
     }
 
     isEmailEntered() {
-        return this.email.trim() !== '';
+        return this.emailModel.isEntered();
     }
 
     isEmailTooLong() {
-        return this.email.length < 100;
+        return this.emailModel.isTooLong();
     }
 
     isTermsAccepted() {
         return this.acceptTerms === true || this.acceptTerms === "true";
     }
-
-
 }
 
-
-export default RegisterModel
+export default RegisterModel;
