@@ -1,3 +1,4 @@
+import createToken from "../../../utils/createToken.js";
 import errorResponse from "../../../utils/errorResponse.js";
 import AuthService from "../services/auth.service.js";
 
@@ -11,6 +12,19 @@ class AuthController {
         } catch (error) {
             errorResponse(error, res)
         }
+    }
+
+    static async loginUser(req, res) {
+        const { email, password, rememberMe } = req.body;
+
+        try {
+            const authUserId = await AuthService.loginUser(email, password, rememberMe);
+            createToken(res, authUserId, rememberMe)
+            res.end();
+        } catch (error) {
+            errorResponse(error, res)
+        }
+
     }
 
 
