@@ -5,6 +5,9 @@ import { dbPool } from "../../../config/mysql.config.js";
 import UserService from "./user.services.js";
 // import LoginModel from "../models/login.model.js";
 import UserRepository from "../repositories/user.repository.js";
+import LoginModel from "../models/login.model.js";
+import createToken from "../../../utils/createToken.js";
+import comparePasswords from "../../../utils/comparePassword.js";
 
 class AuthService {
     static async registerUser(email, password, confirmPassword, acceptTerms) {
@@ -90,6 +93,47 @@ class AuthService {
 
     }
 
+
+    static async loginUser(email, password, rememberMe) {
+        const loginModel = new LoginModel(email, password, rememberMe);
+
+        if (!loginModel.isPasswordEntered()) {
+            throw new ValidationError({
+                field: "password",
+                message: "Nie podano hasła"
+            });
+        }
+
+
+        if (!loginModel.isEmailEntered()) {
+            throw new ValidationError({
+                field: "email",
+                message: "Nie podano adresu email"
+            })
+        }
+
+
+        const findUser = await UserService.getUserByEmail(email);
+
+        if (!findUser || findUser.length === 0) {
+            throw new ValidationError({
+                field: "email",
+                message: "zły email"
+            })
+        }
+
+        const isPasswordsCompare = await comparePasswords(password, findUser[0].password)
+
+        if (!isPasswordsCompare) {
+            throw new ValidationError({
+                field: "password",
+                message: "złe hasło"
+            })
+
+        }
+
+        return findUser[0].id
+    }
 
 }
 

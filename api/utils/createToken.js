@@ -9,13 +9,11 @@ const createToken = (res, userId, rememberMe) => {
         throw new Error("Brak klucza TOKEN w zmiennych środowiskowych.");
     }
 
-
     const cookieOptions = {
         httpOnly: true,
     }
 
-
-    if (rememberMe) {
+    if (rememberMe === "true" || rememberMe === true) {
         cookieOptions.maxAge = 365 * 24 * 60 * 60 * 1000;
     }
 

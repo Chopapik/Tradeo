@@ -1,6 +1,7 @@
 import ValidationError from "../errors/ValidationError.js";
 
 const errorResponse = (error, res) => {
+    console.log(error)
     if (error instanceof ValidationError) {
         res.status(400).json({
             errorType: error.type,
@@ -8,6 +9,7 @@ const errorResponse = (error, res) => {
             errorField: error.field,
             errorMessage: error.message
         });
+
     } else if (error instanceof Error) {
         res.status(500).json({
             errorType: "critical",
