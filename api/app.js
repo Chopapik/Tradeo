@@ -22,7 +22,7 @@ await connectDB();
 
 
 import authRoute from './features/user/routes/auth.route.js';
-
+import userRoute from "./features/user/routes/user.route.js"
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -37,6 +37,8 @@ app.set('view engine', 'jade');
 
 
 app.use('/auth', authRoute);
+app.use('/user', userRoute);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
