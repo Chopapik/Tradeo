@@ -1,0 +1,87 @@
+.page {
+    background-color: #1E1E1E; /* ciemnoszary/szaroczarny */
+    min-height: 100vh;
+    color: white;
+    font-family: Arial, sans-serif;
+    width: 100vw;
+  }
+  
+  /* Górne menu */
+  .topMenu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #3282B8;
+    padding: 15px 30px;
+  }
+  
+  /* Lewa sekcja */
+  .left {
+    flex: 1;
+  }
+  
+  .logo {
+    font-size: 24px;
+    
+    color: white;
+    font-family: 'Merriweather', serif;
+  }
+  
+  /* Środkowa sekcja */
+  .center {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .searchBox {
+    position: relative;
+    width: 60%;
+  }
+  
+  .searchBox input {
+    width: 100%;
+    padding: 8px 35px 8px 10px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+  }
+  
+  .searchIcon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  
+  /* Prawa sekcja */
+  .right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+  }
+  
+  .icon {
+    font-size: 20px;
+    cursor: pointer;
+  }
+  .logoContainer {
+    padding-top: 100px;   /* Padding od góry 100px */
+    margin-left: 20%;     /* 20% przestrzeni od lewej */
+    margin-right: 20%;    /* 20% przestrzeni od prawej */
+    border-radius: 20px;  /* Zaokrąglone rogi */
+    background-color: #f0f0f0;  /* Opcjonalnie, aby było widać tło */
+    display: flex;
+    justify-content: center; /* Wycentrowanie zawartości w poziomie */
+    align-items: center;     /* Wycentrowanie zawartości w pionie */
+  }
+  
+  .logoImage {
+    max-width: 100%;   /* Zapewnia, że obraz nie wyjdzie poza kontener */
+    height: auto;      /* Proporcjonalne skalowanie obrazu */
+    border-radius: 15px;  /* Zaokrąglenie samego obrazu, jeśli chcesz */
+  }
+  
