@@ -16,6 +16,14 @@ class UserService {
             throw new Error(`Błąd podczas tworzenia użytkownika: ${error.message}`);
         }
     }
+
+    static async updateUserData(userData) {
+        try {
+            await UserRepository.updateUserData(userData)
+        } catch (error) {
+            throw new Error(`Błąd podczas aktualizowania danych użytkownika: ${error.message}`);
+        }
+    }
 }
 
 export default UserService;
