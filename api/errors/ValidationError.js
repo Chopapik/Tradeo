@@ -8,7 +8,7 @@ class ValidationError extends Error {
         super(message);
         this.field = field || "";
         this.type = type || "inline";
-        this.name = this.constructor.name; // Ustawienie nazwy na "ValidationError"
+        this.name = this.constructor.name;
     }
 }
 
